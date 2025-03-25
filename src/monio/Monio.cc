@@ -60,9 +60,9 @@ void monio::Monio::readState(atlas::FieldSet& localFieldSet,
           atlas::Field globalField = utilsatlas::getGlobalField(localField);
           if (mpiCommunicator_.rank() == mpiRankOwner_) {
             auto& functionSpace = globalField.functionspace();
-            auto& grid = atlas::functionspace::NodeColumns(functionSpace).mesh().grid();
+            auto grid = utilsatlas::getGridFromFunctionSpace(functionSpace);
             // Initialise file
-            int variableConvention = initialiseFile(grid.name(), filePath, true);
+            int variableConvention = initialiseFile(grid, filePath, true);
             // getFileData returns a copy of FileData (with required LFRic mesh data), so read data
             // is discarded when FileData goes out-of-scope for reading subsequent fields.
             FileData fileData = getFileData(grid.name());
@@ -120,10 +120,10 @@ void monio::Monio::readIncrements(atlas::FieldSet& localFieldSet,
           atlas::Field globalField = utilsatlas::getGlobalField(localField);
           if (mpiCommunicator_.rank() == mpiRankOwner_) {
             auto& functionSpace = globalField.functionspace();
-            auto& grid = atlas::functionspace::NodeColumns(functionSpace).mesh().grid();
+            auto grid = utilsatlas::getGridFromFunctionSpace(functionSpace);
 
             // Initialise file
-            int variableConvention = initialiseFile(grid.name(), filePath);
+            int variableConvention = initialiseFile(grid, filePath);
             // getFileData returns a copy of FileData (with required LFRic mesh data), so read data
             // is discarded when FileData goes out-of-scope for reading subsequent fields.
             FileData fileData = getFileData(grid.name());
@@ -172,7 +172,7 @@ void monio::Monio::writeIncrements(const atlas::FieldSet& localFieldSet,
   if (filePath.length() != 0) {
     try {
       auto& functionSpace = localFieldSet[0].functionspace();
-      auto& grid = atlas::functionspace::NodeColumns(functionSpace).mesh().grid();
+      auto grid = utilsatlas::getGridFromFunctionSpace(functionSpace);
       FileData fileData = getFileData(grid.name());
       cleanFileData(fileData);  // Remove metadata required for reading, but not for writing.
       if (isLfricConvention == false) {
@@ -235,7 +235,7 @@ void monio::Monio::writeState(const atlas::FieldSet& localFieldSet,
   if (filePath.length() != 0) {
     try {
       auto& functionSpace = localFieldSet[0].functionspace();
-      auto& grid = atlas::functionspace::NodeColumns(functionSpace).mesh().grid();
+      auto grid = utilsatlas::getGridFromFunctionSpace(functionSpace);
       FileData fileData = getFileData(grid.name());
       cleanFileData(fileData);  // Remove metadata required for reading, but not for writing.
       if (isLfricConvention == false) {
@@ -390,7 +390,7 @@ monio::FileData monio::Monio::getFileData(const std::string& gridName) {
   return FileData();  // This function is called by all PEs. A return is essential.
 }
 
-void monio::Monio::createLfricAtlasMap(FileData& fileData, const atlas::CubedSphereGrid& grid) {
+void monio::Monio::createLfricAtlasMap(FileData& fileData, const atlas::Grid& grid) {
   oops::Log::trace() << "Monio::createLfricAtlasMap()" << std::endl;
   if (mpiCommunicator_.rank() == mpiRankOwner_) {
     if (fileData.getLfricAtlasMap().size() == 0) {
