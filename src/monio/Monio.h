@@ -16,6 +16,7 @@
 
 #include "AtlasReader.h"
 #include "AtlasWriter.h"
+#include "Constants.h"
 #include "FileData.h"
 #include "Reader.h"
 #include "Writer.h"
@@ -41,12 +42,16 @@ class Monio {
   void readState(atlas::FieldSet& localFieldSet,
            const std::vector<consts::FieldMetadata>& fieldMetadataVec,
            const std::string& filePath,
-           const util::DateTime& dateTime);
+           const util::DateTime& dateTime,
+           const consts::eLfricAtlasMapMethods& lfricAtlasMap =
+           consts::eLfricAtlasMapMethods::eKDtree);
 
   /// \brief Reads files without a time component, i.e. increment files.
   void readIncrements(atlas::FieldSet& localFieldSet,
                 const std::vector<consts::FieldMetadata>& fieldMetadataVec,
-                const std::string& filePath);
+                const std::string& filePath,
+                const consts::eLfricAtlasMapMethods& lfricAtlasMap =
+                consts::eLfricAtlasMapMethods::eKDtree);
 
   /// \brief Writes increment files. No time component but the variables can use JEDI or LFRic write
   ///        names.
@@ -73,7 +78,9 @@ class Monio {
   ///        it's called from LFRic-Lite.
   int initialiseFile(const atlas::Grid& grid,
                      const std::string& filePath,
-                     bool doCreateDateTimes = false);
+                     const bool doCreateDateTimes = false,
+                     const consts::eLfricAtlasMapMethods& lfricAtlasMap =
+                     consts::eLfricAtlasMapMethods::eKDtree);
 
  private:
   /// \brief Private class constructor to prevent instantiation outside of the singleton.
@@ -89,7 +96,10 @@ class Monio {
   FileData getFileData(const std::string& gridName);
 
   /// \brief Creates and stores a map between Atlas and LFRic horizontal ordering.
-  void createLfricAtlasMap(FileData& fileData, const atlas::Grid& grid);
+  void createLfricAtlasMap(FileData& fileData,
+                           const atlas::Grid& grid,
+                           const consts::eLfricAtlasMapMethods& lfricAtlasMap =
+                           consts::eLfricAtlasMapMethods::eKDtree);
 
   /// \brief Creates and stores date-times from a state file.
   void createDateTimes(FileData& fileData,

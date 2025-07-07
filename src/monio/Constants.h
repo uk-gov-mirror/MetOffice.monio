@@ -95,6 +95,11 @@ enum eDataTypes {
   eNumberOfDataTypes
 };
 
+enum eLfricAtlasMapMethods {
+  eTrivial,
+  eKDtree
+};
+
 /// String/Views ///////////////////////////////////////////////////////////////////////////////////
 
 const std::string_view kTimeDimName = "time_counter";

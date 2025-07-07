@@ -98,7 +98,8 @@ std::vector<std::shared_ptr<monio::DataContainerBase>> convertLatLonToContainers
 }
 
 std::vector<size_t> createLfricAtlasMap(const std::vector<atlas::PointLonLat>& atlasCoords,
-                                        const std::vector<atlas::PointLonLat>& lfricCoords) {
+                                        const std::vector<atlas::PointLonLat>& lfricCoords,
+                                        const consts::eLfricAtlasMapMethods& lfricAtlasMapMethod) {
   std::vector<size_t> lfricAtlasMap;
   // Essential check to ensure grid is configured to accommodate the data
   if (atlasCoords.size() != lfricCoords.size()) {
@@ -108,22 +109,26 @@ std::vector<size_t> createLfricAtlasMap(const std::vector<atlas::PointLonLat>& a
   }
   lfricAtlasMap.reserve(atlasCoords.size());
 
-  // Make a kd-tree using atlasLonLat as the point,
-  // with element index i as payload
   std::vector<size_t> indices(atlasCoords.size());
   std::iota(begin(indices), end(indices), 0);
 
-  const atlas::Geometry unitSphere(1.0);
-  atlas::util::IndexKDTree tree(unitSphere);
-  tree.build(atlasCoords, indices);
+  // Trivially map between the LFRic and Atlas indices.
+  if (lfricAtlasMapMethod == consts::eLfricAtlasMapMethods::eTrivial) {
+    lfricAtlasMap = indices;
+  } else if (lfricAtlasMapMethod == consts::eLfricAtlasMapMethods::eKDtree) {
+    // Make a kd-tree using atlasLonLat as the point,
+    // with element index i as payload
+    const atlas::Geometry unitSphere(1.0);
+    atlas::util::IndexKDTree tree(unitSphere);
+    tree.build(atlasCoords, indices);
 
-  // Partitioning vector to create atlas::Distribution for mesh generation
-  std::vector<int> partitioning(tree.size(), -1);
-
-  // find atlas global indices for each element of modelLonLat
-  for (const auto& lfricCoord : lfricCoords) {
-    auto idx = tree.closestPoint(lfricCoord).payload();
-    lfricAtlasMap.push_back(idx);
+    // find atlas global indices for each element of modelLonLat
+    for (const auto& lfricCoord : lfricCoords) {
+      const auto idx = tree.closestPoint(lfricCoord).payload();
+      lfricAtlasMap.push_back(idx);
+    }
+  } else {
+    utils::throwException("utilsatlas::createLfricAtlasMap()> Invalid LFRic-Atlas map chosen...");
   }
   return lfricAtlasMap;
 }

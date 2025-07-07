@@ -37,7 +37,8 @@ namespace utilsatlas {
                                         const std::vector<std::string>& coordNames);
 
   std::vector<size_t> createLfricAtlasMap(const std::vector<atlas::PointLonLat>& atlasCoords,
-                                          const std::vector<atlas::PointLonLat>& lfricCoords);
+                                          const std::vector<atlas::PointLonLat>& lfricCoords,
+                                          const consts::eLfricAtlasMapMethods& lfricAtlasMapMethod);
 
   atlas::FieldSet getGlobalFieldSet(const atlas::FieldSet& fieldSet);
 

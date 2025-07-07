@@ -44,9 +44,10 @@ monio::Monio::~Monio() {
 }
 
 void monio::Monio::readState(atlas::FieldSet& localFieldSet,
-                            const std::vector<consts::FieldMetadata>& fieldMetadataVec,
-                            const std::string& filePath,
-                            const util::DateTime& dateTime) {
+                             const std::vector<consts::FieldMetadata>& fieldMetadataVec,
+                             const std::string& filePath,
+                             const util::DateTime& dateTime,
+                             const consts::eLfricAtlasMapMethods& lfricAtlasMapMethod) {
   oops::Log::trace() << "Monio::readState()" << std::endl;
   if (localFieldSet.size() == 0) {
     Monio::get().closeFiles();
@@ -62,7 +63,8 @@ void monio::Monio::readState(atlas::FieldSet& localFieldSet,
             auto& functionSpace = globalField.functionspace();
             auto grid = utilsatlas::getGridFromFunctionSpace(functionSpace);
             // Initialise file
-            int variableConvention = initialiseFile(grid, filePath, true);
+            const int variableConvention = initialiseFile(grid, filePath, true,
+                                                          lfricAtlasMapMethod);
             // getFileData returns a copy of FileData (with required LFRic mesh data), so read data
             // is discarded when FileData goes out-of-scope for reading subsequent fields.
             FileData fileData = getFileData(grid.name());
@@ -106,7 +108,8 @@ void monio::Monio::readState(atlas::FieldSet& localFieldSet,
 
 void monio::Monio::readIncrements(atlas::FieldSet& localFieldSet,
                             const std::vector<consts::FieldMetadata>& fieldMetadataVec,
-                            const std::string& filePath) {
+                            const std::string& filePath,
+                            const consts::eLfricAtlasMapMethods& lfricAtlasMapMethod) {
   oops::Log::trace() << "Monio::readIncrements()" << std::endl;
   if (localFieldSet.size() == 0) {
     Monio::get().closeFiles();
@@ -123,7 +126,8 @@ void monio::Monio::readIncrements(atlas::FieldSet& localFieldSet,
             auto grid = utilsatlas::getGridFromFunctionSpace(functionSpace);
 
             // Initialise file
-            int variableConvention = initialiseFile(grid, filePath);
+            const int variableConvention = initialiseFile(grid, filePath, false,
+                                                          lfricAtlasMapMethod);
             // getFileData returns a copy of FileData (with required LFRic mesh data), so read data
             // is discarded when FileData goes out-of-scope for reading subsequent fields.
             FileData fileData = getFileData(grid.name());
@@ -329,7 +333,8 @@ void monio::Monio::closeFiles() {
 
 int monio::Monio::initialiseFile(const atlas::Grid& grid,
                                  const std::string& filePath,
-                                 bool doCreateDateTimes) {
+                                 const bool doCreateDateTimes,
+                                 const consts::eLfricAtlasMapMethods& lfricAtlasMapMethod) {
   oops::Log::trace() << "Monio::initialiseFile()" << std::endl;
   int variableConvention = consts::eLfricConvention;  // LFRic convention is default
   if (mpiCommunicator_.rank() == mpiRankOwner_) {
@@ -343,7 +348,7 @@ int monio::Monio::initialiseFile(const atlas::Grid& grid,
     reader_.readFullDatum(fileData, std::string(consts::kVerticalFullName));
     reader_.readFullDatum(fileData, std::string(consts::kVerticalHalfName));
     // Process read data
-    createLfricAtlasMap(fileData, grid);
+    createLfricAtlasMap(fileData, grid, lfricAtlasMapMethod);
     if (doCreateDateTimes == true) {
       reader_.readFullDatum(fileData, std::string(consts::kTimeVarName));
       createDateTimes(fileData,
@@ -390,7 +395,9 @@ monio::FileData monio::Monio::getFileData(const std::string& gridName) {
   return FileData();  // This function is called by all PEs. A return is essential.
 }
 
-void monio::Monio::createLfricAtlasMap(FileData& fileData, const atlas::Grid& grid) {
+void monio::Monio::createLfricAtlasMap(FileData& fileData,
+                                       const atlas::Grid& grid,
+                                       const consts::eLfricAtlasMapMethods& lfricAtlasMapMethod) {
   oops::Log::trace() << "Monio::createLfricAtlasMap()" << std::endl;
   if (mpiCommunicator_.rank() == mpiRankOwner_) {
     if (fileData.getLfricAtlasMap().size() == 0) {
@@ -399,7 +406,8 @@ void monio::Monio::createLfricAtlasMap(FileData& fileData, const atlas::Grid& gr
                                 reader_.getCoordData(fileData, consts::kLfricCoordVarNames);
       std::vector<atlas::PointLonLat> lfricCoords = utilsatlas::getLfricCoords(coordData);
       std::vector<atlas::PointLonLat> atlasCoords = utilsatlas::getAtlasCoords(grid);
-      fileData.setLfricAtlasMap(utilsatlas::createLfricAtlasMap(atlasCoords, lfricCoords));
+      fileData.setLfricAtlasMap(utilsatlas::createLfricAtlasMap(atlasCoords, lfricCoords,
+                                                                lfricAtlasMapMethod));
     }
   }
 }
