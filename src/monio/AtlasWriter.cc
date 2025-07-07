@@ -76,7 +76,9 @@ void monio::AtlasWriter::populateFileDataWithField(FileData& fileData,
     // Create lon and lat
     std::vector<atlas::PointLonLat> atlasLonLat = utilsatlas::getAtlasCoords(field);
     std::vector<std::shared_ptr<DataContainerBase>> coordContainers =
-              utilsatlas::convertLatLonToContainers(atlasLonLat, consts::kCoordVarNames);
+              utilsatlas::convertLatLonToContainers(atlasLonLat,
+                                                    consts::kCoordVarNames,
+                                                    fileData.getLfricAtlasMap());
     for (const auto& coordContainer : coordContainers) {
       data.addContainer(coordContainer);
     }

@@ -1,7 +1,7 @@
 /******************************************************************************
 * MONIO - Met Office NetCDF Input Output                                      *
 *                                                                             *
-* (C) Crown Copyright 2023, Met Office. All rights reserved.                  *
+* (C) Crown Copyright 2023-2025, Met Office. All rights reserved.             *
 *                                                                             *
 * This software is licensed under the terms of the 3-Clause BSD License       *
 * which can be obtained from https://opensource.org/license/bsd-3-clause/.    *
@@ -82,13 +82,17 @@ std::vector<atlas::PointLonLat> getAtlasCoords(const atlas::Grid& grid) {
 
 std::vector<std::shared_ptr<monio::DataContainerBase>> convertLatLonToContainers(
                         const std::vector<atlas::PointLonLat>& atlasCoords,
-                        const std::vector<std::string>& coordNames) {
+                        const std::vector<std::string>& coordNames,
+                        const std::vector<size_t>& lfricToAtlasMap) {
   std::vector<std::shared_ptr<monio::DataContainerBase>> coordContainers;
   std::shared_ptr<DataContainerDouble> lonContainer =
             std::make_shared<DataContainerDouble>(coordNames[consts::eLongitude]);
   std::shared_ptr<DataContainerDouble> latContainer =
             std::make_shared<DataContainerDouble>(coordNames[consts::eLatitude]);
-  for (const auto& atlasCoord : atlasCoords) {
+
+  // Map from atlas -> lfric coords. To write in LFRic order.
+  for (const size_t atlasIdx : lfricToAtlasMap) {
+    const auto& atlasCoord = atlasCoords.at(atlasIdx);
     lonContainer->setDatum(atlasCoord.lon());
     latContainer->setDatum(atlasCoord.lat());
   }

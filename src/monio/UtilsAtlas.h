@@ -1,7 +1,7 @@
 /******************************************************************************
 * MONIO - Met Office NetCDF Input Output                                      *
 *                                                                             *
-* (C) Crown Copyright 2023, Met Office. All rights reserved.                  *
+* (C) Crown Copyright 2023-2025, Met Office. All rights reserved.             *
 *                                                                             *
 * This software is licensed under the terms of the 3-Clause BSD License       *
 * which can be obtained from https://opensource.org/license/bsd-3-clause/.    *
@@ -34,7 +34,8 @@ namespace utilsatlas {
 
   std::vector<std::shared_ptr<DataContainerBase>> convertLatLonToContainers(
                                         const std::vector<atlas::PointLonLat>& atlasCoords,
-                                        const std::vector<std::string>& coordNames);
+                                        const std::vector<std::string>& coordNames,
+                                        const std::vector<size_t>& lfricToAtlasMap);
 
   std::vector<size_t> createLfricAtlasMap(const std::vector<atlas::PointLonLat>& atlasCoords,
                                           const std::vector<atlas::PointLonLat>& lfricCoords);
