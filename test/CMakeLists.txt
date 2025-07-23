@@ -93,6 +93,12 @@ ecbuild_add_test(TARGET  test_monio_state_basic
                  LIBS    monio
                  MPI     4)
 
+ecbuild_add_test(TARGET  test_monio_mpi_read
+                 SOURCES mains/TestMPIRead.cc
+                 ARGS    "testinput/state_basic.yaml"
+                 LIBS    monio
+                 MPI     1)
+
 ecbuild_add_test(TARGET  test_monio_state_full
                  SOURCES mains/TestStateFull.cc
                  ARGS    "testinput/state_full.yaml"
