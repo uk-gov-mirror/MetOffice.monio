@@ -45,11 +45,13 @@ get_directory_property(MONIO_DEFINITIONS COMPILE_DEFINITIONS)
 
 ## Sources
 include(monio_compiler_flags)
-include_directories(${MONIO_INCLUDE_DIRS}
-                    ${CMAKE_CURRENT_SOURCE_DIR}/test)
-
+include_directories(${MONIO_INCLUDE_DIRS})
 add_subdirectory(src)
-add_subdirectory(test)
+
+if(BUILD_TESTING)
+  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/test)
+  add_subdirectory(test)
+endif()
 
 ## Finalise configuration
 ecbuild_install_project(NAME ${PROJECT_NAME})
