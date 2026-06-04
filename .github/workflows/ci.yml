@@ -17,6 +17,18 @@ env:
 
 
 jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install checkers/linters
+        run: |
+          python3 -m pip install cmakelint
+      - name: Run cmakelint
+        run: |
+          mapfile -t names < <(find -name 'CMakeLists.txt' -o -name '*.cmake')
+          cmakelint "${names[@]}"
+
   build1:
     if: |
       ( github.repository_owner == 'MetOffice' && github.event.pull_request.draft == false )

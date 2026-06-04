@@ -9,6 +9,8 @@
 #include "DataContainerDouble.h"
 
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 #include "Constants.h"
 #include "Monio.h"

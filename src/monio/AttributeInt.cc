@@ -8,6 +8,8 @@
 ******************************************************************************/
 #include "AttributeInt.h"
 
+#include <string>
+
 #include "Constants.h"
 
 monio::AttributeInt::AttributeInt(const std::string& name, const int value) :

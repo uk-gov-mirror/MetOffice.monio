@@ -8,6 +8,8 @@
 ******************************************************************************/
 #include "AttributeDouble.h"
 
+#include <string>
+
 #include "Constants.h"
 
 monio::AttributeDouble::AttributeDouble(const std::string& name, const double value) :

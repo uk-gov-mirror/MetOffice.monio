@@ -8,6 +8,10 @@
 ******************************************************************************/
 #include "AtlasReader.h"
 
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "oops/util/Logger.h"
 
 #include "Utils.h"

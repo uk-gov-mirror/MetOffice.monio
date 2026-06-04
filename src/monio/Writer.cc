@@ -10,7 +10,9 @@
 
 #include <netcdf>
 #include <map>
+#include <memory>
 #include <stdexcept>
+#include <string>
 
 #include "Constants.h"
 #include "DataContainerDouble.h"

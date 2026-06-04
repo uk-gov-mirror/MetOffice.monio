@@ -8,6 +8,8 @@
 ******************************************************************************/
 #include "FileData.h"
 
+#include <vector>
+
 monio::FileData::FileData() :
   data_(),
   metadata_() {}
