@@ -8,6 +8,9 @@
 ******************************************************************************/
 #include "DataContainerBase.h"
 
+#include <string>
+#include <vector>
+
 monio::DataContainerBase::DataContainerBase(
     const std::string& name,
     const int type) :

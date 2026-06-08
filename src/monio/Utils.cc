@@ -13,7 +13,10 @@
 #include <algorithm>
 #include <array>
 #include <fstream>
+#include <map>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "AttributeBase.h"
 #include "DataContainerBase.h"

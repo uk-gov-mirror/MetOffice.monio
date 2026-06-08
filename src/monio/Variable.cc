@@ -9,8 +9,12 @@
 #include "Variable.h"
 
 #include <algorithm>
+#include <map>
+#include <memory>
 #include <stdexcept>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include "AttributeInt.h"
 #include "AttributeString.h"

@@ -8,6 +8,8 @@
 ******************************************************************************/
 #include "AttributeString.h"
 
+#include <string>
+
 #include "Constants.h"
 
 monio::AttributeString::AttributeString(const std::string& name,

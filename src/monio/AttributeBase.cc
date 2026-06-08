@@ -8,6 +8,8 @@
 ******************************************************************************/
 #include "AttributeBase.h"
 
+#include <string>
+
 monio::AttributeBase::AttributeBase(
     const std::string& name,
     const int type):

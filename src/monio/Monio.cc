@@ -8,7 +8,10 @@
 ******************************************************************************/
 #include "Monio.h"
 
+#include <iostream>
 #include <memory>
+#include <string>
+#include <utility>
 #include <vector>
 
 #include "atlas/parallel/mpi/mpi.h"

@@ -9,6 +9,10 @@
 ******************************************************************************/
 #include "AtlasWriter.h"
 
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "atlas/grid/Iterator.h"
 #include "oops/util/Logger.h"
 

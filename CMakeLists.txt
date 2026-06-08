@@ -36,9 +36,10 @@ find_package(atlas 0.20.2 REQUIRED)
 find_package(oops 1.0.0 REQUIRED)
 
 ## Export package info
-set(MONIO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/src
-                       ${CMAKE_CURRENT_BINARY_DIR}/src
-                       ${oops_SOURCE_DIR}/src)
+set(MONIO_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
+  ${CMAKE_CURRENT_BINARY_DIR}/src
+  ${oops_SOURCE_DIR}/src)
 
 set(MONIO_LIBRARIES monio)
 get_directory_property(MONIO_DEFINITIONS COMPILE_DEFINITIONS)

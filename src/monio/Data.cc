@@ -8,7 +8,10 @@
 ******************************************************************************/
 #include "Data.h"
 
+#include <map>
+#include <memory>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include "oops/util/Logger.h"

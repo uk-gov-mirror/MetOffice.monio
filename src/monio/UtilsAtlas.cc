@@ -9,7 +9,10 @@
 #include "UtilsAtlas.h"
 
 #include <algorithm>
+#include <memory>
 #include <numeric>
+#include <string>
+#include <vector>
 
 #include "atlas/functionspace.h"
 #include "atlas/grid/Iterator.h"
